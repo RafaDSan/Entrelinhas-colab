@@ -9,7 +9,7 @@ async function searchBooks(query) {
 
   const params = new URLSearchParams({
     q: query,
-    limit: 10,
+    limit: 1,
     fields: fields,
   });
 
