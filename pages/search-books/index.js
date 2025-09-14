@@ -11,7 +11,6 @@ export default function SearchBooksPage() {
 
   const handleSearch = async (event) => {
     event.preventDefault();
-
     setSearchResults([]);
     setError(null);
 
@@ -33,6 +32,7 @@ export default function SearchBooksPage() {
       }
 
       const books = await response.json();
+      console.log("books: ", books);
       setSearchResults(books);
     } catch (err) {
       setError(err.message);
@@ -40,6 +40,29 @@ export default function SearchBooksPage() {
       setIsLoading(false);
     }
   };
+
+  const handleSaveBook = async (bookToSave) => {
+    try {
+      const response = await fetch("/api/v1/books", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(bookToSave),
+      });
+
+      if (!response.ok) {
+        throw new Error("Falaha ao salvar livro");
+      }
+
+      const savedBook = await response.json();
+      alert(`Livro "${savedBook.title}" foi salvo com sucesso!`);
+    } catch (err) {
+      console.error("Save Error: ", err);
+      alert(err.message);
+    }
+  };
+
   return (
     <div
       style={{
@@ -100,7 +123,9 @@ export default function SearchBooksPage() {
                 <strong> Ano de Publicação:</strong> {book.first_publish_year}
               </p>
               {/* TODO: Add a button to save the book to a list */}
-              <button>Adicionar à Lista</button>
+              <button onClick={() => handleSaveBook(book)}>
+                Adicionar à Lista
+              </button>
             </div>
           </div>
         ))}
