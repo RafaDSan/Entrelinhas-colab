@@ -13,13 +13,14 @@
     "test": "jest",
     "test:watch": "jest --watchAll",
     "migration:create": "node-pg-migrate --migrations-dir infra/migrations create",
-    "migration:up": "node-pg-migrate --migrations-dir infra/migrations up"
+    "migration:up": "node-pg-migrate --migrations-dir infra/migrations --envPath .env up"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^17.2.2",
+    "dotenv": "^16.4.4",
+    "dotenv-expand": "^11.0.6",
     "next": "^15.5.2",
     "next-connect": "^1.0.0",
     "pg": "^8.16.3",
@@ -29,7 +30,7 @@
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "jest": "^30.1.3",
-    "node-pg-migrate": "^8.0.3",
+    "node-pg-migrate": "^6.2.2",
     "prettier": "3.6.2"
   }
 }
