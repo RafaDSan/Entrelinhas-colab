@@ -1,4 +1,4 @@
-import searchBooks from "models/searchBooks.js";
+import searchBooks from "models/searchBook.js";
 import controller from "infra/controller.js";
 
 export default async function getHandler(request, response) {

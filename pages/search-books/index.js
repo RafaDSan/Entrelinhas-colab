@@ -24,7 +24,7 @@ export default function SearchBooksPage() {
     try {
       const params = new URLSearchParams({ q: searchQuery });
 
-      const response = await fetch(`/api/v1/search_books?${params}`);
+      const response = await fetch(`/api/v1/search-books?${params}`);
 
       if (!response.ok) {
         const errorData = await response.json();
