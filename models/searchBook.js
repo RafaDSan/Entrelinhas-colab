@@ -9,7 +9,7 @@ async function searchBooks(query) {
 
   const params = new URLSearchParams({
     q: query,
-    limit: 1,
+    limit: 50,
     fields: fields,
   });
 
@@ -26,12 +26,14 @@ async function searchBooks(query) {
     const formattedBooks = data.docs.map((doc) => ({
       key: doc.key,
       title: doc.title,
-      author_name: doc.author_name,
-      cover_id: doc.cover_i,
+      author_name: doc.author_name ? doc.author_name : null,
+      cover_id: doc.cover_i ? doc.cover_i : null,
       cover_url: doc.cover_i
         ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`
         : null,
-      first_publish_year: doc.first_publish_year,
+      first_publish_year: doc.first_publish_year
+        ? doc.first_publish_year
+        : null,
     }));
 
     return formattedBooks;
