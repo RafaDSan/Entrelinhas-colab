@@ -25,12 +25,12 @@ export default function SearchBooksPage() {
       const params = new URLSearchParams({ q: searchQuery });
 
       const response = await fetch(`/api/v1/search-books?${params}`);
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Ocorreu um erro na busca.");
       }
 
+      console.log("response", response);
       const books = await response.json();
       console.log("books: ", books);
       setSearchResults(books);
@@ -52,7 +52,7 @@ export default function SearchBooksPage() {
       });
 
       if (!response.ok) {
-        throw new Error("Falaha ao salvar livro");
+        throw new Error("Falha ao salvar livro");
       }
 
       const savedBook = await response.json();
@@ -117,12 +117,11 @@ export default function SearchBooksPage() {
             <div>
               <h2 style={{ marginTop: 0 }}>{book.title}</h2>
               <p>
-                <strong>Author:</strong> {book.author_name[0]}
+                <strong>Author:</strong> {book.author_name?.[0]}
               </p>
               <p>
                 <strong> Ano de Publicação:</strong> {book.first_publish_year}
               </p>
-              {/* TODO: Add a button to save the book to a list */}
               <button onClick={() => handleSaveBook(book)}>
                 Adicionar à Lista
               </button>
