@@ -4,21 +4,23 @@
   "description": "Software de lista de livros para projeto da faculdade",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run docker:up && next dev",
+    "dev": "npm run docker:up && npm run wait-for-postgres && npm run migration:up && next dev",
     "build": "next build",
     "start": "next start",
     "docker:up": "docker compose --project-name entrelinhas -f ./infra/compose.yaml up -d",
     "docker:stop": "docker compose --project-name entrelinhas -f ./infra/compose.yaml stop",
     "docker:down": "docker compose --project-name entrelinhas -f ./infra/compose.yaml down",
-    "test": "jest",
-    "test:watch": "jest --watchAll",
+    "test": "npm run docker:up && concurrently --names next,jest --hide next --kill-others --success command-jest \"next dev\" \"jest --runInBand --verbose\"",
+    "test:watch": "jest --watchAll --runInBand",
     "migration:create": "node-pg-migrate --migrations-dir infra/migrations create",
-    "migration:up": "node-pg-migrate --migrations-dir infra/migrations --envPath .env up"
+    "migration:up": "node-pg-migrate --migrations-dir infra/migrations --envPath .env up",
+    "wait-for-postgres": "node infra/scripts/wait-for-postgres.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async-retry": "^1.3.3",
     "dotenv": "^16.4.4",
     "dotenv-expand": "^11.0.6",
     "next": "^15.5.2",
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
+    "concurrently": "^9.2.1",
     "jest": "^30.1.3",
     "node-pg-migrate": "^6.2.2",
     "prettier": "3.6.2"
