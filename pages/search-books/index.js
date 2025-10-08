@@ -30,9 +30,7 @@ export default function SearchBooksPage() {
         throw new Error(errorData.message || "Ocorreu um erro na busca.");
       }
 
-      console.log("response", response);
       const books = await response.json();
-      console.log("books: ", books);
       setSearchResults(books);
     } catch (err) {
       setError(err.message);
@@ -117,7 +115,7 @@ export default function SearchBooksPage() {
             <div>
               <h2 style={{ marginTop: 0 }}>{book.title}</h2>
               <p>
-                <strong>Author:</strong> {book.author_name?.[0]}
+                <strong>Autor:</strong> {book.author_name?.[0]}
               </p>
               <p>
                 <strong> Ano de Publicação:</strong> {book.first_publish_year}
