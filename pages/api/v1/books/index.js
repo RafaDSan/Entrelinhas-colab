@@ -16,9 +16,7 @@ async function postHandler(request, response) {
 }
 
 async function getHandler(request, response) {
-  response.status(200);
-
-  return response.json({
-    status: response.statusCode,
-  });
+  const myBooksList = await book.findAll();
+  console.log(myBooksList);
+  return response.status(200).json(myBooksList);
 }
