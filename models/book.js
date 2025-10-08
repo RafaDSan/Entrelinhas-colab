@@ -28,10 +28,17 @@ async function create(bookDataFromApi) {
   return result.rows[0];
 }
 
-// async function findAll()  {
+async function findAll() {
+  const result = await database.query(
+    "SELECT * FROM books ORDER BY created_at DESC;"
+  );
 
-// }
+  return result.rows;
+}
 
-export default {
+const book = {
   create,
+  findAll,
 };
+
+export default book;
