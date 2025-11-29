@@ -14,7 +14,8 @@
     "test:watch": "jest --watchAll --runInBand",
     "migration:create": "node-pg-migrate --migrations-dir infra/migrations create",
     "migration:up": "node-pg-migrate --migrations-dir infra/migrations --envPath .env.development up",
-    "wait-for-postgres": "node infra/scripts/wait-for-postgres.js"
+    "wait-for-postgres": "node infra/scripts/wait-for-postgres.js",
+    "access-postgres": "docker exec -it postgres-dev-entrelinhas psql -U local_user -d local_db"
   },
   "keywords": [],
   "author": "",
