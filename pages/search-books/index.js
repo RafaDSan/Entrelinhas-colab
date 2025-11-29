@@ -1,12 +1,11 @@
 import { useState } from "react";
 
+const MOCK_USER_ID = "a7287bcb-c496-4389-ba20-b7d6943dffe3"; 
+
 export default function SearchBooksPage() {
   const [searchQuery, setSearchQuery] = useState("");
-
   const [searchResults, setSearchResults] = useState([]);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [error, setError] = useState(null);
 
   const handleSearch = async (event) => {
@@ -23,8 +22,8 @@ export default function SearchBooksPage() {
 
     try {
       const params = new URLSearchParams({ q: searchQuery });
-
       const response = await fetch(`/api/v1/search-books?${params}`);
+      
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Ocorreu um erro na busca.");
@@ -39,22 +38,37 @@ export default function SearchBooksPage() {
     }
   };
 
-  const handleSaveBook = async (bookToSave) => {
+
+  const handleAddBook = async (bookToSave) => {
     try {
-      const response = await fetch("/api/v1/books", {
+
+      const saveBookResponse = await fetch("/api/v1/books", {
         method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
+        headers: { "Content-type": "application/json" },
         body: JSON.stringify(bookToSave),
       });
 
-      if (!response.ok) {
-        throw new Error("Falha ao salvar livro");
+      if (!saveBookResponse.ok) {
+        throw new Error("Falha ao salvar dados do livro");
       }
 
-      const savedBook = await response.json();
-      alert(`Livro "${savedBook.title}" foi salvo com sucesso!`);
+      const savedBook = await saveBookResponse.json();
+      
+      const statusResponse = await fetch("/api/v1/statuses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: MOCK_USER_ID,
+          bookId: savedBook.id, 
+        }),
+      });
+
+      if (!statusResponse.ok) {
+        throw new Error("Falha ao adicionar à lista de leitura");
+      }
+
+      alert(`Livro "${savedBook.title}" adicionado à sua lista "Quero Ler"!`);
+      
     } catch (err) {
       console.error("Save Error: ", err);
       alert(err.message);
@@ -70,7 +84,7 @@ export default function SearchBooksPage() {
         padding: "20px",
       }}
     >
-      <h1> Busca de Livros</h1>
+      <h1>Busca de Livros</h1>
       <p>Use a barra abaixo para encontrar seus livros.</p>
 
       <form onSubmit={handleSearch} style={{ display: "flex", gap: "10px" }}>
@@ -120,8 +134,20 @@ export default function SearchBooksPage() {
               <p>
                 <strong> Ano de Publicação:</strong> {book.first_publish_year}
               </p>
-              <button onClick={() => handleSaveBook(book)}>
-                Adicionar à Lista
+              
+              <button 
+                onClick={() => handleAddBook(book)}
+                style={{
+                    backgroundColor: "#0070f3",
+                    color: "white",
+                    border: "none",
+                    padding: "10px 15px",
+                    cursor: "pointer",
+                    borderRadius: "5px",
+                    fontWeight: "bold"
+                }}
+              >
+                + Quero Ler
               </button>
             </div>
           </div>
