@@ -5,6 +5,30 @@ export default function MyBooksPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const handleSaveBook = async (book) => {
+    try {
+      const response = await fetch("/api/v1/favorites", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ book_id: book.id }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.message || "Falhou em salvar livro aos favoritos."
+        );
+      }
+
+      alert(`"${book.title}" was added to your favorites!`);
+    } catch (err) {
+      setError(err.message);
+      alert(`Error: ${err.message}`);
+    }
+  };
+
   useEffect(() => {
     const handleFetch = async () => {
       setIsLoading(true);
